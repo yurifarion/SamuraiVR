@@ -16,14 +16,21 @@ public class FruitSpawner : MonoBehaviour
     public Transform spawnerPoint4;
 
     public float pushStrength = 15;
-    public bool readyToStart = true;
+    private bool readyToStart = false;
     
     // Start is called before the first frame update
     void Start()
     {
         timer = timeInterval;
     }
-
+    public void startSpawn()
+    {
+        readyToStart = true;
+    }
+    public void stopSpawn()
+    {
+        readyToStart = false;
+    }
     // Update is called once per frame
     void Update()
     {

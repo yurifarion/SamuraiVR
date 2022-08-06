@@ -2,9 +2,14 @@ using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class KatanaSlicer : MonoBehaviour
 {
+    //check if the katana is in hand
+    public bool isGrabbed = false;
+   
+
     //Tip and Base will feed the Slice class to create two new GameObjects from the slice. the positive up and negative down
     public GameObject _tip;
     public GameObject _base;
@@ -23,7 +28,11 @@ public class KatanaSlicer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
+    }
+    public void SetGrab(bool grabStatus)
+    {
+        isGrabbed = grabStatus;
     }
     private void OnTriggerEnter(Collider other)
     {
