@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class KatanaSlicer : MonoBehaviour
@@ -16,13 +17,18 @@ public class KatanaSlicer : MonoBehaviour
     private Vector3 _triggerEnterTipPosition;
     private Vector3 _triggerEnterBasePosition;
     private Vector3 _triggerExitTipPosition;
+    private GameManager gm;
 
+
+    //Katana Sound FX
+    public AudioSource soundFXSource;
+    public AudioClip unsheathedCutAudioClip;
     //after the cut this is the force that will be applyied to the object
     private float _forceAppliedToCut = 3f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -32,6 +38,8 @@ public class KatanaSlicer : MonoBehaviour
     }
     public void SetGrab(bool grabStatus)
     {
+        soundFXSource.clip = unsheathedCutAudioClip;
+        soundFXSource.Play();
         isGrabbed = grabStatus;
     }
     private void OnTriggerEnter(Collider other)
@@ -43,6 +51,14 @@ public class KatanaSlicer : MonoBehaviour
     // in order to know if the blade is or not cutting something is determined by trigger;
     private void OnTriggerExit(Collider other)
     {
+
+        
+
+        //If it cuts a bomb then it will gameOver
+        if (other.gameObject.tag == "Bomb")
+        {
+            SceneManager.LoadScene("GameOverExplosion");
+        }
         _triggerExitTipPosition = _tip.transform.position;
 
         //Create a triangle between the tip and base so that we can get the normal
@@ -75,12 +91,15 @@ public class KatanaSlicer : MonoBehaviour
 
         GameObject[] slices = Slicer.Slice(plane, other.gameObject);
 
-        //Make sure that every gameObject after sliced will be destroied after 1 sec
+        //Make sure that every gameObject after sliced will be destroied after 10 secs
         foreach (GameObject o in slices)
         {
-            Destroy(o,1);
+            Destroy(o,10);
         }
         Destroy(other.gameObject);
+
+        //Add score after cut
+        gm.AddScore();
 
         Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
         Vector3 newNormal = transformedNormal + Vector3.up * _forceAppliedToCut;

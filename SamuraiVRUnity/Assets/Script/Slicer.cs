@@ -63,11 +63,14 @@ namespace Assets.Scripts
 
             meshGameObject.AddComponent<MeshFilter>();
             meshGameObject.AddComponent<MeshRenderer>();
-            Sliceable sliceable = meshGameObject.AddComponent<Sliceable>();
 
-            sliceable.IsSolid = originalSliceable.IsSolid;
-            sliceable.ReverseWireTriangles = originalSliceable.ReverseWireTriangles;
-            sliceable.UseGravity = originalSliceable.UseGravity;
+            //After one slice the GameObject is not sliceable anymore
+
+            //Sliceable sliceable = meshGameObject.AddComponent<Sliceable>();
+
+            //sliceable.IsSolid = originalSliceable.IsSolid;
+            //sliceable.ReverseWireTriangles = originalSliceable.ReverseWireTriangles;
+            //sliceable.UseGravity = originalSliceable.UseGravity;
 
             meshGameObject.GetComponent<MeshRenderer>().materials = originalMaterial;
 
